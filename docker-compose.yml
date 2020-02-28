@@ -2,16 +2,22 @@ version: '3'
 
 services:
   php:
-    image: php:7.2-apache
+    build:
+      context: ./php7.2
+      dockerfile: dockerfile
     volumes:
-      - ./php.ini:/usr/local/etc/php/php.ini
+      - ./php7.2/php.ini:/usr/local/etc/php/php.ini
       - ./html:/var/www/html
     ports:
-      - 8080:80
+      - 8000:80
+    links:
+      - mysql:mysql
   mysql:
     image: mysql:5.7
     volumes:
       - ./mysql:/var/lib/mysql
+    ports:
+      - 13306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=test
@@ -27,6 +33,6 @@ services:
     links:
       - mysql
     ports:
-      - 4040:80
+      - 4000:80
     volumes:
       - ./phpmyadmin/sessions:/sessions
