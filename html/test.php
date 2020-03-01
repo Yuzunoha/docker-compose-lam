@@ -6,14 +6,25 @@ $MYSQL_PASSWORD = "test";
 
 try {
     $pdo = new PDO(
-        'mysql:host=mysql;dbname=' . $MYSQL_DATABASE . ';charset=utf8'
-        , $MYSQL_USER
-        , $MYSQL_PASSWORD,
-        array(PDO::ATTR_EMULATE_PREPARES => false)
+        'mysql:host=mysql;dbname=' . $MYSQL_DATABASE . ';charset=utf8',
+        $MYSQL_USER,
+        $MYSQL_PASSWORD
     );
-
 } catch (PDOException $e) {
     exit('データベース接続失敗。' . $e->getMessage());
 }
 
-print_r($pdo);
+try {
+    $sql = 'select * from user';
+
+    // SQLを実行
+    $res = $pdo->query($sql);
+} catch (PDOException $e) {
+    echo "sql : " . $sql . "<br>";
+    exit('sql失敗。' . $e->getMessage());
+}
+
+echo "<pre>";
+foreach ($res as $value) {
+    print_r($value);
+}
